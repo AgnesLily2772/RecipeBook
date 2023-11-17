@@ -1,6 +1,6 @@
 import sgMail from '@sendgrid/mail'
 
-const key = "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"
+const key = "MY_SECRET_KEY"
 sgMail.setApiKey(key)
 const msg = {
   to: 'agneslily2727@gmail.com', // Change to your recipient

@@ -1,4 +1,4 @@
-import { UserModel } from "../Model/Model.js";
+import { RecipeModel, UserModel } from "../Model/Model.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { sendActivationEmail } from "../Utils/sendMail_old.js";
@@ -61,9 +61,31 @@ export const signInUser = async (req, res) => {
     
     export const getUserData = (req, res) =>{
         res.send(req.rootUser);
+        return
       }
 
     export const signOutUser = (req, res)=> {
         res.clearCookie("jwtoken", { path: "/" });
         res.status(200).send(`userLogout`);
+      }
+
+      export const createRecipe = async(req,res) => {
+        try {
+                const {title,ingredients,instructions,imageUrl,cuisine,category,preparationTime,createdBy} = req.body;
+                const newRecipe = new RecipeModel({title:title,ingredients:ingredients,instructions:instructions,imageUrl:imageUrl,cuisine:cuisine,category:category,preparationTime:preparationTime,createdBy:createdBy})
+                await newRecipe.save()
+                res.status(200).json(newRecipe);
+        } catch (error) {
+                res.status(404).json({ message: "Create Recipe Error: " + error });
+        }
+      }
+      export const getUserRecipe =async(req,res) => {
+        const userId = req.rootUserId
+        const userRecipes = await RecipeModel.find({createdBy:userId})
+        res.status(200).json(userRecipes)
+      }
+      export const getAllUsersRecipes =async(req,res) => {
+        const userId = req.rootUserId
+        const allUsersRecipes = await RecipeModel.find({createdBy:{$ne:userId}})
+        res.status(200).json(allUsersRecipes)
       }

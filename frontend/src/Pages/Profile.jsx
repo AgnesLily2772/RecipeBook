@@ -4,7 +4,7 @@ import axios from 'axios';
 
 const Profile = () => {
   const [userData,setUserData] = useState({});
-  const callAboutPage = async () =>{
+  const callProfilePage = async () =>{
     try{
       const response =await axios.get('http://localhost:5000/api/getUserData',{withCredentials:true});
       const data =  response.data;
@@ -18,7 +18,7 @@ const Profile = () => {
     }
   }
 useEffect(() => {
-  callAboutPage();
+  callProfilePage();
 }, [])
   return (
    <>

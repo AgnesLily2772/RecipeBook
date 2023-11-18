@@ -7,6 +7,9 @@ import './Styles/Styles.css';
 import Signin from './Pages/Signin.jsx';
 import Signout from './Pages/Signout.jsx';
 import Profile from './Pages/Profile.jsx';
+import MyRecipes from './Pages/MyRecipes.jsx';
+import CreateRecipe from './Pages/CreateRecipe.jsx';
+import ViewRecipe from './Pages/ViewRecipe.jsx';
 
 export default function App() {
   return (
@@ -20,6 +23,9 @@ export default function App() {
                                 <Route exact path="/signin" element={<Signin />} />
                                 <Route exact path="/signout" element={<Signout />} />
                                 <Route exact path="/profile" element={<Profile />} />
+                                <Route exact path="/myRecipes" element={<MyRecipes />} />
+                                <Route exact path="/createRecipe" element={<CreateRecipe />} />
+                                <Route exact path="/viewRecipe/:id" element={<ViewRecipe />} />
                         </Routes>
                 </BrowserRouter>
         </AuthDataContext>

@@ -15,6 +15,7 @@ const Navbar = () => {
                                 <ul className="navbar-nav ms-auto">
                                 {authState.isAuthenticated ? 
                                         <>
+                                        <li className="nav-item"><Link className="nav-link my-navbar-item" to="/myRecipes" >MyRecipes</Link></li>
                                         <li className="nav-item"><Link className="nav-link my-navbar-item" to="/profile" >Profile</Link></li>
                                         <li className="nav-item"><Link className="nav-link my-navbar-item" to="/signout" >SignOut</Link></li>
                                         </>:

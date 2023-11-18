@@ -51,4 +51,47 @@ const userSchema = new mongoose.Schema({
         }
     };
 
-    export const UserModel = mongoose.model("USER", userSchema);
+    const recipeSchema = new mongoose.Schema({
+        title: {
+                type: String,
+                required: true,
+              },
+              ingredients: [{
+                type:String,
+                required:true
+              }],
+              instructions: {
+                type: String,
+                required: true,
+              },
+              imageUrl: {
+                  type: String,
+              },
+              cuisine: {
+                type: String,
+              },
+              category: {
+                type: String,
+              },
+              preparationTime: {
+                type: Number, // in minutes
+                required: true,
+              },
+              createdBy: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'USER', // Assuming there is a User model
+              },
+              createdAt: {
+                type: Date,
+                default: Date.now,
+                immutable:true
+              },
+              updatedAt: {
+                type: Date,
+                default:Date.now
+              },
+    })
+
+
+export const UserModel = mongoose.model("USER", userSchema);
+export const RecipeModel = mongoose.model("RECIPE", recipeSchema);

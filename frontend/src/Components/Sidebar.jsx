@@ -3,15 +3,14 @@ import React from 'react'
 const Sidebar = () => {
         const filterOptions = {
                 "Preparation Time":["0 - 20 mins", "20 - 40 mins","40 - 60 mins"],
-                "Number Of Ingredients":["0 to 5","5 to 10",["10 to 15"]],
+                "Number Of Ingredients":["0 to 5","5 to 10","10 to 15"],
                 "Cuisine":["TamilNadu","Andhra","Kerala"],
-                "Category":["Breakfast","Lunch","Dinner","Desserts"]
+                "Category":["Breakfast","Lunch","Dinner"]
         }
   return (
         // <div className="col-sm-2 flex-grow-sm-1 flex-shrink-1 flex-grow-0 sticky-top pb-sm-0 mt-5 pt-3">
-        <div className="col-sm-2 flex-grow-sm-1 flex-shrink-1 flex-grow-0 sticky-top pb-sm-0 mt-5">
-
-<div className="bg-light  border border-primary rounded-3 p-1 h-100 nav nav-pills flex-sm-column flex-row justify-content-between">
+        <div className="col-sm-2 flex-grow-sm-1 flex-shrink-1 flex-grow-0 sticky-top pb-sm-0  mt-5 ">
+<div className="border border-primary rounded-3 nav nav-pills flex-sm-column flex-row p-2">
                 <div>
                         <a href="#submenu1"  data-bs-toggle="collapse" className="nav-link px-0 align-middle">
                             <i className="fs-4 bi-speedometer2"></i> <span className="ms-1 d-none d-sm-inline">Preparation Time</span> </a>

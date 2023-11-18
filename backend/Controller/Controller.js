@@ -71,14 +71,44 @@ export const signInUser = async (req, res) => {
 
       export const createRecipe = async(req,res) => {
         try {
-                const {title,ingredients,instructions,imageUrl,cuisine,category,preparationTime,createdBy} = req.body;
-                const newRecipe = new RecipeModel({title:title,ingredients:ingredients,instructions:instructions,imageUrl:imageUrl,cuisine:cuisine,category:category,preparationTime:preparationTime,createdBy:createdBy})
+                const newRecipe = new RecipeModel(req.body)
                 await newRecipe.save()
                 res.status(200).json(newRecipe);
         } catch (error) {
                 res.status(404).json({ message: "Create Recipe Error: " + error });
         }
       }
+      export const getRecipe = async(req,res) => {
+        try {
+                const { id } = req.params;
+                const recipe = await RecipeModel.findOne({ _id: id });
+                res.status(200).json(recipe);
+        } catch (error) {
+                res.status(404).json({ message: "Get Recipe Error: " + error });
+        }
+      }
+
+      export const deleteRecipe = async(req,res) => {
+        try {
+                const { id } = req.params;
+                const recipe = await RecipeModel.findByIdAndDelete(id);
+                if (!recipe)  return res.status(404).json({ error: 'Recipe not found' });
+                res.status(200).json({ message: 'Recipe deleted successfully' });   
+        } catch (error) {
+                res.status(400).json({ error: 'Internal Server Error' });
+        }
+      }
+      export const updateRecipe = async (req, res) => {
+        try {
+          const { id } = req.params;
+          const updatedRecipe = req.body;
+          const recipe = await RecipeModel.findByIdAndUpdate(id, updatedRecipe, { new: true });
+          if (!recipe) return res.status(404).json({ error: 'Recipe not found' });
+          res.status(200).json(recipe);
+        } catch (error) {
+          res.status(404).json({ error: 'Internal Server Error' });
+        }
+      };
       export const getUserRecipe =async(req,res) => {
         const userId = req.rootUserId
         const userRecipes = await RecipeModel.find({createdBy:userId})
@@ -89,3 +119,4 @@ export const signInUser = async (req, res) => {
         const allUsersRecipes = await RecipeModel.find({createdBy:{$ne:userId}})
         res.status(200).json(allUsersRecipes)
       }
+      

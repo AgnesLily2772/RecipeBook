@@ -3,10 +3,30 @@ import React, { useEffect, useState } from 'react'
 import pastaImg from "../Imgs/pasta.jpg"
 import {useNavigate} from "react-router-dom"
 import { FaClipboardList } from "react-icons/fa";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const MyRecipes = () => {
         const [myRecipes,setMyRecipes] = useState([])
         const navigate = useNavigate()
+        const handleDelete =async (id) =>{
+                console.log(id)
+                const response = await axios.delete(`http://localhost:5000/api/deleteRecipe/${id}`,{withCredentials:true});
+                if(response.status !== 200){
+                        toast.error(response.error,{
+                                position: toast.POSITION.BOTTOM_RIGHT,
+                                autoClose: 1000,
+                      })
+                }
+                else{
+                        toast.success("Recipe Deleted",{
+                                position: toast.POSITION.BOTTOM_RIGHT,
+                                autoClose: 1000,
+                        })
+                }
+                setMyRecipes((myRecipes) => myRecipes.filter((myRecipe) => myRecipe.id !==id))
+                navigate("/myRecipes")
+        }
         const callMyRecipes = async () =>{
                 try{
                   const response =await axios.get('http://localhost:5000/api/getUserRecipe',{withCredentials:true});
@@ -32,14 +52,8 @@ const MyRecipes = () => {
                         <h5 className='recipe-title'>{recipe.title}</h5>
                         <div className='d-flex'>
                         <img className='recipe-img mb-2' src={pastaImg.toString()} alt={`${recipe.title} Img`}/>
-                        {/* <div className='recipe-desc'>
-                                <p>Cusine: {recipe.cuisine}</p>
-                                <p>Category: {recipe.category}</p>
-                                <p>From: {recipe.createdBy}</p>
-                        </div> */}
                         </div>
                         <div className='recipe-actions'>
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop"> Launch</button>
                         <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog modal-lg">
                                 <div class="modal-content">
@@ -51,26 +65,37 @@ const MyRecipes = () => {
                                 <div className='row'>
                                 <img className='col recipe-img mb-2' src={pastaImg.toString()} alt={`${recipe.title} Img`}/>
                                 <div className='col w-50'>
-                                        <span>
-                                        <FaClipboardList size={30}/> {recipe.instructions}
+                                <FaClipboardList size={30}/> Ingredients
+                                        {recipe.ingredients.map((instruction,idx) => (
+                                                <li>{instruction}</li>
+                                        ))}                                        
+                                        <FaClipboardList size={30}/> Instructions
+                                        {recipe.instructions.split(",").map((instruction,idx) => (
+                                                <li>{instruction}</li>
+                                        ))}
+                                        <FaClipboardList size={30}/> Preparation time
+                                        <li>Approximately {recipe.preparationTime}mins</li>
+                                        <FaClipboardList size={30}/> Cuisine & Category
+                                        <li>{recipe.cuisine} & {recipe.category}</li>
                                 </div>
                                 </div>
                                 </div>
                                 <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                        <button type="button" class="btn btn-primary">Like</button>
                                 </div>
                                 </div>
                                 </div>
                                 </div>
-                                <button className='btn btn-success'>View</button>
-                                <button className='btn btn-warning'>Update</button>
-                                <button className='btn btn-danger'>Delete</button>
+                                <button className='btn btn-success'  data-bs-toggle="modal" data-bs-target="#staticBackdrop">View</button>
+                                <button className='btn btn-warning' onClick={() => navigate(`/updateRecipe/${recipe._id}`)}>Update</button>
+                                <button className='btn btn-danger' onClick={() => handleDelete(recipe._id)}>Delete</button>
                         </div>
                         </div>
                 )): <>Nothing</>}
                 </div>
         </div>
+        <ToastContainer/>
+
     </>
   )
 }

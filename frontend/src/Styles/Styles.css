@@ -95,11 +95,15 @@
 .recipe-desc{
         color: white;
 }
+.recipe-view{
+        overflow-y: scroll;
+}
 /* ViewRecipes */
 .my-boundary{
         border: 3px solid navy;
         height:75vh;
         padding: 10px;
+        overflow: auto;
 }
 @media (max-width: 576px) {
         #submenu1,

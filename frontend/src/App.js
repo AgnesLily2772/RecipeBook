@@ -9,7 +9,7 @@ import Signout from './Pages/Signout.jsx';
 import Profile from './Pages/Profile.jsx';
 import MyRecipes from './Pages/MyRecipes.jsx';
 import CreateRecipe from './Pages/CreateRecipe.jsx';
-import ViewRecipe from './Pages/ViewRecipe.jsx';
+import UpdateRecipe from './Pages/UpdateRecipe.jsx';
 
 export default function App() {
   return (
@@ -25,7 +25,7 @@ export default function App() {
                                 <Route exact path="/profile" element={<Profile />} />
                                 <Route exact path="/myRecipes" element={<MyRecipes />} />
                                 <Route exact path="/createRecipe" element={<CreateRecipe />} />
-                                <Route exact path="/viewRecipe/:id" element={<ViewRecipe />} />
+                                <Route exact path="/updateRecipe/:id" element={<UpdateRecipe />} />
                         </Routes>
                 </BrowserRouter>
         </AuthDataContext>

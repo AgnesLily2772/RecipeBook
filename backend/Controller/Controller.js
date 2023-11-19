@@ -1,4 +1,4 @@
-import { RecipeModel, UserModel } from "../Model/Model.js";
+import { RecipeModel, UserModel,CommentModel } from "../Model/Model.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { sendActivationEmail } from "../Utils/sendMail_old.js";
@@ -114,9 +114,30 @@ export const signInUser = async (req, res) => {
         const userRecipes = await RecipeModel.find({createdBy:userId})
         res.status(200).json(userRecipes)
       }
+      
       export const getAllUsersRecipes =async(req,res) => {
         const userId = req.rootUserId
         const allUsersRecipes = await RecipeModel.find({createdBy:{$ne:userId}})
         res.status(200).json(allUsersRecipes)
       }
+      export const postComment = async (req, res) => {
+        try {
+          const { id } = req.params;
+          const userId = req.rootUserId;
+          const newComment = new CommentModel({ text: req.body.text, postId: id, userId: userId });
+          await newComment.save();
+          res.status(200).json(newComment);
+        } catch (error) {
+          res.status(404).json({ message: "Post Comment Error: " + error });
+        }
+      };
       
+      export const getRecipeComment = async(req,res) => {
+        try {
+                const { id } = req.params;
+                const comments = await CommentModel.find({postId:id})
+                res.status(200).json(comments);
+        } catch (error) {
+                res.status(404).json({ message: "Get Comment Error: " + error });
+        }
+      }

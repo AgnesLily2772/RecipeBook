@@ -1,15 +1,10 @@
 import React,{useState} from 'react'
 import Header from './Header.jsx'
 import ViewRecipes from '../Pages/ViewRecipes.jsx'
-import NearRecipes from '../Pages/NearRecipes.jsx'
 import Sidebar from './Sidebar.jsx'
-import PakathuBar from "./PakathuBar.jsx"
 
 const Home = () => {
-        const [searchQuery, setSearchQuery] = useState('');
         const [allRecipes,setAllRecipes] = useState([])
-
-        // const [filter,setFilter] = useState([])
         const [search,setSearch] = useState([]);
 
         const filterData = e => {
@@ -56,12 +51,12 @@ const Home = () => {
   return (
     <>
                 <div className="container-fluid mt-5 d-flex flex-column flex-sm-row gap-3">
-                {/* <Sidebar filterTags={filterTags} setFilterTags={setFilterTags}/> */}
-                <PakathuBar filterCuisine={filterCuisine} filterCategory={filterCategory} filterNoIngredients={filterNoIngredients} filterPrepTime={filterPrepTime}/>
+                <Sidebar  filterCuisine={filterCuisine} filterCategory={filterCategory} filterNoIngredients={filterNoIngredients} filterPrepTime={filterPrepTime}/>
+                {/* <PakathuBar filterCuisine={filterCuisine} filterCategory={filterCategory} filterNoIngredients={filterNoIngredients} filterPrepTime={filterPrepTime}/> */}
                         <div className="d-flex flex-column flex-grow-sm-0 flex-grow-1 gap-4">
                                 <Header filterData={filterData}/>
-                                {/* <ViewRecipes searchQuery={searchQuery} filter={filter} search={search} setSearch={setSearch}/> */}
-                                <NearRecipes allRecipes={allRecipes} setAllRecipes={setAllRecipes} search={search} setSearch={setSearch}/>
+                                <ViewRecipes allRecipes={allRecipes} setAllRecipes={setAllRecipes} search={search} setSearch={setSearch}/>
+                                {/* <NearRecipes allRecipes={allRecipes} setAllRecipes={setAllRecipes} search={search} setSearch={setSearch}/> */}
                         </div>
                 </div>
     </>

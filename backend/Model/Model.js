@@ -91,7 +91,26 @@ const userSchema = new mongoose.Schema({
                 default:Date.now
               },
     })
-
+    const commentSchema = new mongoose.Schema({
+        text: {
+            type: String,
+            required: true,
+        },
+        userId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'USER',
+        },
+        postId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'RECIPE',
+        },
+        createdAt: {
+            type: Date,
+            default: Date.now,
+            immutable: true,
+        },
+    });
 
 export const UserModel = mongoose.model("USER", userSchema);
 export const RecipeModel = mongoose.model("RECIPE", recipeSchema);
+export const CommentModel = mongoose.model("COMMENT", commentSchema);

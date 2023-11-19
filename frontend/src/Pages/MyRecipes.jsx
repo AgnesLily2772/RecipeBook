@@ -5,9 +5,11 @@ import {useNavigate} from "react-router-dom"
 import { FaClipboardList } from "react-icons/fa";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import ViewRecipe from './ViewRecipe';
 
 const MyRecipes = () => {
         const [myRecipes,setMyRecipes] = useState([])
+        const [modalShow, setModalShow] = React.useState(false);
         const navigate = useNavigate()
         const handleDelete =async (id) =>{
                 console.log(id)
@@ -54,39 +56,8 @@ const MyRecipes = () => {
                         <img className='recipe-img mb-2' src={pastaImg.toString()} alt={`${recipe.title} Img`}/>
                         </div>
                         <div className='recipe-actions'>
-                        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog modal-lg">
-                                <div class="modal-content">
-                                <div class="modal-header">
-                                        <h5 class="modal-title" id="staticBackdropLabel">{recipe.title}</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                <div className='row'>
-                                <img className='col recipe-img mb-2' src={pastaImg.toString()} alt={`${recipe.title} Img`}/>
-                                <div className='col w-50'>
-                                <FaClipboardList size={30}/> Ingredients
-                                        {recipe.ingredients.map((instruction,idx) => (
-                                                <li>{instruction}</li>
-                                        ))}                                        
-                                        <FaClipboardList size={30}/> Instructions
-                                        {recipe.instructions.split(",").map((instruction,idx) => (
-                                                <li>{instruction}</li>
-                                        ))}
-                                        <FaClipboardList size={30}/> Preparation time
-                                        <li>Approximately {recipe.preparationTime}mins</li>
-                                        <FaClipboardList size={30}/> Cuisine & Category
-                                        <li>{recipe.cuisine} & {recipe.category}</li>
-                                </div>
-                                </div>
-                                </div>
-                                <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                </div>
-                                </div>
-                                </div>
-                                </div>
-                                <button className='btn btn-success'  data-bs-toggle="modal" data-bs-target="#staticBackdrop">View</button>
+                                <button className='btn btn-success'  onClick={() => setModalShow(true)}>View</button>
+                                <ViewRecipe show={modalShow} onHide={() => setModalShow(false)} recipe={recipe}/>
                                 <button className='btn btn-warning' onClick={() => navigate(`/updateRecipe/${recipe._id}`)}>Update</button>
                                 <button className='btn btn-danger' onClick={() => handleDelete(recipe._id)}>Delete</button>
                         </div>
@@ -94,7 +65,6 @@ const MyRecipes = () => {
                 )): <>Nothing</>}
                 </div>
         </div>
-        <ToastContainer/>
 
     </>
   )

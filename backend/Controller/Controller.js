@@ -1,14 +1,14 @@
 import { RecipeModel, UserModel,CommentModel } from "../Model/Model.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import { sendActivationEmail } from "../Utils/sendMail_old.js";
+import { sendActivationEmail } from "../Utils/mailSender.js";
 
 export const signUpUser = async (req, res) => {
     const { fullName, email,  password, dietPreference, location } = req.body;
     try {
         const emailCheck = await UserModel.findOne({ email: email });
         if (emailCheck) {
-            res.status(404).json({ message: "Email ID already exists" });
+            res.status(409).json({ message: "Email ID already exists" });
             return;
         }
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -23,7 +23,7 @@ export const signUpUser = async (req, res) => {
         });
         await newUser.save();
         const activationLink = `${process.env.CLIENT_URL}/activate?token=${activationToken}`;
-        // sendActivationEmail(email, activationLink);
+        sendActivationEmail(email, activationLink);
         res.status(200).json(newUser);
     } catch (error) {
         res.status(404).json({ message:  "SignUp Error: "+error });
@@ -35,16 +35,16 @@ export const signInUser = async (req, res) => {
         try {
                 const user = await UserModel.findOne({ email: email });
                 if (!user) {
-                        res.status(404).json({ message: "User does not exist" });
+                        res.status(409).json({ message: "User email does not exist" });
                         return
                 }
-        //     if (!user.isActivated){
-        //             res.status(403).json({ message: "Account not activated. Please verify your account.",});
-        //             return
-        //     }
+            if (!user.isActivated){
+                    res.status(403).json({ message: "Account not activated. Please verify your account.",});
+                    return
+            }
                 const passwordValidation = await bcrypt.compare(password,user.password);
                 if (!passwordValidation) {
-                        res.status(404).json({ message: "Password is incorrect" });
+                        res.status(401).json({ message: "Password is incorrect" });
                         return
                 }
                 const token = await user.generateSessionToken();
@@ -71,11 +71,12 @@ export const signInUser = async (req, res) => {
 
       export const createRecipe = async(req,res) => {
         try {
-                const newRecipe = new RecipeModel(req.body)
+                const userId = req.rootUserId
+                const newRecipe = new RecipeModel({createdBy: userId,...req.body});
                 await newRecipe.save()
                 res.status(200).json(newRecipe);
         } catch (error) {
-                res.status(404).json({ message: "Create Recipe Error: " + error });
+                res.status(404).json({ message: "An error occured" });
         }
       }
       export const getRecipe = async(req,res) => {
@@ -84,7 +85,7 @@ export const signInUser = async (req, res) => {
                 const recipe = await RecipeModel.findOne({ _id: id });
                 res.status(200).json(recipe);
         } catch (error) {
-                res.status(404).json({ message: "Get Recipe Error: " + error });
+                res.status(404).json({ message: "An error occured" });
         }
       }
 
@@ -95,7 +96,7 @@ export const signInUser = async (req, res) => {
                 if (!recipe)  return res.status(404).json({ error: 'Recipe not found' });
                 res.status(200).json({ message: 'Recipe deleted successfully' });   
         } catch (error) {
-                res.status(400).json({ error: 'Internal Server Error' });
+                res.status(404).json({ message: "An error occured" });
         }
       }
       export const updateRecipe = async (req, res) => {
@@ -106,9 +107,22 @@ export const signInUser = async (req, res) => {
           if (!recipe) return res.status(404).json({ error: 'Recipe not found' });
           res.status(200).json(recipe);
         } catch (error) {
-          res.status(404).json({ error: 'Internal Server Error' });
+                res.status(404).json({ message: "An error occured" });
         }
       };
+      
+      export const activateAccount = async (req, res) => {
+        const { token } = req.query;
+        try {
+            const decodedToken = jwt.verify(token, process.env.AUTH_KEY);
+            const { email } = decodedToken;
+            await UserModel.findOneAndUpdate( { email }, { isActivated: true }, { new: true });
+            res.status(200).json({ message: "Account activated successfully" });
+        } catch (error) {
+            res.status(400).json({ message: "Invalid activation token" });
+        }
+    };
+
       export const getUserRecipe =async(req,res) => {
         const userId = req.rootUserId
         const userRecipes = await RecipeModel.find({createdBy:userId})
@@ -128,7 +142,7 @@ export const signInUser = async (req, res) => {
           await newComment.save();
           res.status(200).json(newComment);
         } catch (error) {
-          res.status(404).json({ message: "Post Comment Error: " + error });
+                res.status(404).json({ message: "An error occured" });
         }
       };
       
@@ -138,6 +152,10 @@ export const signInUser = async (req, res) => {
                 const comments = await CommentModel.find({postId:id})
                 res.status(200).json(comments);
         } catch (error) {
-                res.status(404).json({ message: "Get Comment Error: " + error });
+                res.status(404).json({ message: "An error occured" });
         }
+      }
+
+      export const check = (req,res) => {
+        res.send(`Hello, Backend is working fine`)
       }

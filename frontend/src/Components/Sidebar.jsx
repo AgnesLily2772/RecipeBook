@@ -3,8 +3,8 @@ import React from 'react'
 const Sidebar = ({filterCuisine,filterCategory,filterNoIngredients,filterPrepTime}) => {
         const PrepTimeFilterOptions = [[0,20], [20,40],[40,60]]
         const NoIngredientsFilterOptions = [[0,5], [5,10], [10,15]];
-        const cuisineOptions = ["TamilNadu","Italian","Andhar","Kerala","International"]
-        const categoryOptions = ["Breakfast","Lunch","Dinner","Desserts"]
+        const cuisineOptions = ["SouthIndian","NorthIndian","International"]
+        const categoryOptions = ["Breakfast","Lunch","Dinner"]
 
   return (
         <div className="col-sm-2 flex-grow-sm-1 flex-shrink-1 flex-grow-0 sticky-top pb-sm-0  mt-5 ">
@@ -20,7 +20,7 @@ const Sidebar = ({filterCuisine,filterCategory,filterNoIngredients,filterPrepTim
                                 ) )}
                         </ul>
                         <a href="#submenu1"  data-bs-toggle="collapse" className="nav-link px-0 align-middle">
-                            <i className="fs-4 bi-speedometer2"></i> <span className="ms-1 d-none d-sm-inline">Preparation Time</span> </a>
+                            <i className="fs-4 bi-speedometer2"></i> <span className="ms-1 d-none d-sm-inline">No.of Ingrediets</span> </a>
                         <ul className="collapse show nav flex-column ms-1" id="submenu1" data-bs-parent="#menu">
                                  {NoIngredientsFilterOptions.map((filter,idx) =>(
                                         <div className="form-check w-100" key={idx}>
@@ -30,7 +30,7 @@ const Sidebar = ({filterCuisine,filterCategory,filterNoIngredients,filterPrepTim
                                 ) )}
                         </ul>
                         <a href="#submenu1"  data-bs-toggle="collapse" className="nav-link px-0 align-middle">
-                            <i className="fs-4 bi-speedometer2"></i> <span className="ms-1 d-none d-sm-inline">Preparation Time</span> </a>
+                            <i className="fs-4 bi-speedometer2"></i> <span className="ms-1 d-none d-sm-inline">Cuisine</span> </a>
                         <ul className="collapse show nav flex-column ms-1" id="submenu1" data-bs-parent="#menu">
                                  {cuisineOptions.map((item,idx) =>(
                                         <div className="form-check w-100" key={idx}>

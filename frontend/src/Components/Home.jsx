@@ -1,20 +1,19 @@
-import React,{useState} from 'react'
+import React,{useContext, useEffect, useState} from 'react'
 import Header from './Header.jsx'
 import ViewRecipes from '../Pages/ViewRecipes.jsx'
 import Sidebar from './Sidebar.jsx'
-
+import { AuthContext } from '../Context/AuthContext.js'
+import Logo from "../Design/RecipeBook_Logo.png"
 const Home = () => {
         const [allRecipes,setAllRecipes] = useState([])
         const [search,setSearch] = useState([]);
+        const {userState} = useContext(AuthContext)
 
         const filterData = e => {
                 const value = e.target.value.toLowerCase();
-                console.log(value)
                 const filteredData = search.filter(
                   item => (`${item.title}`.toLowerCase().includes(value))
                 )
-                console.log(filteredData)
-
                 setAllRecipes(filteredData);
               }
 
@@ -48,17 +47,27 @@ const Home = () => {
                 )
                 setAllRecipes(filteredNoIngredients);
               }
+              
   return (
     <>
-                <div className="container-fluid mt-5 d-flex flex-column flex-sm-row gap-3">
-                <Sidebar  filterCuisine={filterCuisine} filterCategory={filterCategory} filterNoIngredients={filterNoIngredients} filterPrepTime={filterPrepTime}/>
-                {/* <PakathuBar filterCuisine={filterCuisine} filterCategory={filterCategory} filterNoIngredients={filterNoIngredients} filterPrepTime={filterPrepTime}/> */}
-                        <div className="d-flex flex-column flex-grow-sm-0 flex-grow-1 gap-4">
-                                <Header filterData={filterData}/>
-                                <ViewRecipes allRecipes={allRecipes} setAllRecipes={setAllRecipes} search={search} setSearch={setSearch}/>
-                                {/* <NearRecipes allRecipes={allRecipes} setAllRecipes={setAllRecipes} search={search} setSearch={setSearch}/> */}
+        {userState ? 
+                        <div className="container-fluid mt-5 d-flex flex-column flex-sm-row gap-3">
+                        <Sidebar  filterCuisine={filterCuisine} filterCategory={filterCategory} filterNoIngredients={filterNoIngredients} filterPrepTime={filterPrepTime}/>
+                                <div className="d-flex flex-column flex-grow-sm-0 flex-grow-1 gap-4">
+                                        <Header filterData={filterData}/>
+                                        <ViewRecipes allRecipes={allRecipes} setAllRecipes={setAllRecipes} search={search} setSearch={setSearch}/>
+                                </div>
                         </div>
-                </div>
+                        :<>
+                                <div className='my-container'>
+                                        <h1>Welcome to the world of recipes</h1>
+                                        <div className='d-flex flex-row align-items-center gap-3'>
+                                                <img src={Logo} className='w-25'/>
+                                                <h1>The RecipeBook</h1>
+                                        </div>
+                                </div>
+                        </>
+                        }
     </>
   )
 }

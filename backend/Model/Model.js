@@ -74,12 +74,12 @@ const userSchema = new mongoose.Schema({
                 type: String,
               },
               preparationTime: {
-                type: Number, // in minutes
+                type: Number, 
                 required: true,
               },
               createdBy: {
                 type: mongoose.Schema.Types.ObjectId,
-                ref: 'USER', // Assuming there is a User model
+                ref: 'USER',
               },
               createdAt: {
                 type: Date,

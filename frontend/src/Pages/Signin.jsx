@@ -6,35 +6,43 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Cookies from 'js-cookie';
 import { AuthContext } from '../Context/AuthContext';
+import { SERVER_URL } from '../Utils/globals';
 
 const Signin = () => {
         const token = Cookies.get('jwtoken');
+        const {setUserState} = useContext(AuthContext)
 
         const {login,dispatch} = useContext(AuthContext)
         const navigate = useNavigate();
-  const [user,setUser] = useState({email:"",password:""})
-
-  const handleInputs = (e) =>{
-      setUser({...user,[e.target.name]:e.target.value});
-}
+        const [user,setUser] = useState({email:"",password:""})
+        const handleInputs = (e) =>{
+        setUser({...user,[e.target.name]:e.target.value});
+        }
+        const dataValidation = () => {
+                for (let data in user) {
+                        if (user[data].trim() === ""){
+                          toast.error(`${data} is required`, { position: toast.POSITION.BOTTOM_RIGHT, autoClose: 1000 });
+                          return false;
+                        }
+                      }
+                      return true;
+              };
  const handleSignIn =async (e)=>{
-    e.preventDefault();
-
-    const response =await  axios.post(`http://localhost:5000/api/signin`,user,{withCredentials:true});
-    const data = response.data
-    if(response.status === 400 || !data){
-        toast.error(data.error,{
-                position: toast.POSITION.BOTTOM_RIGHT,
-                autoClose: 1000,
-      })
-    }else{
-        toast.success("SignIn Successful",{
-                position: toast.POSITION.BOTTOM_RIGHT,
-                autoClose: 1000,
-        })
-}
-        dispatch(login(token));
-      setTimeout(()=>navigate("/"),2000)
+        e.preventDefault();
+        if(!dataValidation())return
+        try {
+                const response =await  axios.post(`${SERVER_URL}/signin`,user,{withCredentials:true});
+                
+                if(response.status === 200 ){
+                        toast.success("SignIn Successful",{ position: toast.POSITION.BOTTOM_RIGHT, autoClose: 1000})
+                        dispatch(login(token));
+                        setUserState(true)
+                        setTimeout(()=>navigate("/"),2000)
+                }
+        } catch (error) {
+                const errorMessage = error.response ? error.response.data.message : "An error occurred";
+                toast.error(errorMessage, { position: toast.POSITION.BOTTOM_RIGHT, autoClose: 1000 })
+        }
     
  }
   return (

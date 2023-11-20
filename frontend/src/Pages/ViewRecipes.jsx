@@ -1,51 +1,52 @@
-import React,{useEffect,useState} from 'react'
+import React,{useEffect,useCallback} from 'react'
 import axios from 'axios'
-import pastaImg from "../Imgs/pasta.jpg"
 import { useNavigate } from 'react-router-dom'
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { SERVER_URL } from '../Utils/globals';
 const ViewRecipes = ({search,setSearch,allRecipes,setAllRecipes}) => {
         const navigate = useNavigate()
-        const [isModalOpen, setIsModalOpen] = React.useState(false);
-        const [content,setContent] = useState({})
  
-        const callAllRecipes = async () =>{
-                try{
-                  const response =await axios.get('http://localhost:5000/api/getAllUsersRecipes',{withCredentials:true});
-                  const data =  response.data;
-                  setAllRecipes(data);
-                  setSearch(data);
-                  if(!response.status===200){
-                    const error = new Error (response.error);
-                    throw error;
+        const callAllRecipes = useCallback(async () => {
+                try {
+                  const response = await axios.get(`${SERVER_URL}/getAllUsersRecipes`, { withCredentials: true });
+                  if (response.status === 200) {
+                        const data = response.data;
+                        setAllRecipes(data);
+                        setSearch(data);
                   }
-                }catch(err){
-                  console.log(err);
+                } catch (error) {
+                  const errorMessage = error.response ? error.response.data.message : "An error occurred";
+                  toast.error(errorMessage, { position: toast.POSITION.BOTTOM_RIGHT, autoClose: 1000 });
                 }
-        }
-            useEffect(() => {
+              }, [setSearch,setAllRecipes]);
+            
+              useEffect(() => {
                 callAllRecipes();
-            }, [])
+              }, [callAllRecipes]);
 
-            const display = allRecipes.map((recipe,idx) => {
-                return(
-                        <div className='recipe-card' key={idx}>
+            const display = allRecipes && allRecipes.length > 0 ? (
+                allRecipes.map((recipe, idx) => (
+                    <div className='recipe-card' key={idx}>
                         <h5 className='recipe-title'>{recipe.title}</h5>
                         <div className='d-flex'>
-                          <img className='recipe-img mb-2' src={pastaImg.toString()} alt={`${recipe.title} Img`} />
+                            <img className='recipe-img mb-2' src={recipe.imageUrl} alt={`${recipe.title} Img`} />
                         </div>
                         <div className='recipe-actions'>
-                        <button className='btn btn-success'  onClick={() => navigate(`/getRecipe/${recipe._id}`)}>View</button>
-                          <button className='btn btn-warning btn-sm'>Like</button>
-                          <button className='btn btn-info btn-sm' onClick={() => navigate(`/comment/${recipe._id}`)}>Comment</button>
+                            <button className='btn btn-success' onClick={() => navigate(`/getRecipe/${recipe._id}`)}>View</button>
+                            <button className='btn btn-warning btn-sm'>Like</button>
                         </div>
-                      </div>
-                    )
-        })
+                    </div>
+                ))
+            ) : (
+                <p>No recipes found</p>
+            );
   return (
 <div className='my-boundary border border-primary rounded-3'>
             <div className='recipe-gallery recipe-view overflow-hidden'>
           {display}
             </div>
+            <ToastContainer/>
     </div>
   )
 }

@@ -11,7 +11,8 @@ import MyRecipes from './Pages/MyRecipes.jsx';
 import CreateRecipe from './Pages/CreateRecipe.jsx';
 import UpdateRecipe from './Pages/UpdateRecipe.jsx';
 import ViewRecipe from './Pages/ViewRecipe.jsx';
-
+import GetRecipe from './Pages/GetRecipe.jsx';
+import Activation from './Pages/Activation.jsx';
 export default function App() {
   return (
     <div className="App">
@@ -27,7 +28,8 @@ export default function App() {
                                 <Route exact path="/myRecipes" element={<MyRecipes />} />
                                 <Route exact path="/createRecipe" element={<CreateRecipe />} />
                                 <Route exact path="/getRecipe/:id" element={<ViewRecipe />} />
-                                
+                                <Route exact path="/viewRecipe/:id" element={<GetRecipe />} />
+                                <Route exact path="/activate" element={<Activation />} />                                
                                 <Route exact path="/updateRecipe/:id" element={<UpdateRecipe />} />
                         </Routes>
                 </BrowserRouter>

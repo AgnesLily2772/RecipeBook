@@ -11,7 +11,7 @@ router.get("/activateAccount",activateAccount)
 
 router.get("/getUserData",Authenticate, getUserData);
 router.post("/createRecipe",Authenticate,createRecipe);
-router.put("/updateRecipe/:id",updateRecipe);
+router.put("/updateRecipe/:id",Authenticate,updateRecipe);
 router.delete("/deleteRecipe/:id",Authenticate,deleteRecipe);
 router.get("/getUserRecipe",Authenticate,getUserRecipe);
 router.get("/getAllUsersRecipes",Authenticate,getAllUsersRecipes);

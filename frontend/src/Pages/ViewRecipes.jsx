@@ -33,8 +33,7 @@ const ViewRecipes = ({search,setSearch,allRecipes,setAllRecipes}) => {
                             <img className='recipe-img mb-2' src={recipe.imageUrl} alt={`${recipe.title} Img`} />
                         </div>
                         <div className='recipe-actions'>
-                            <button className='btn btn-success' onClick={() => navigate(`/getRecipe/${recipe._id}`)}>View</button>
-                            <button className='btn btn-warning btn-sm'>Like</button>
+                            <button className='btn btn-danger w-100' onClick={() => navigate(`/getRecipe/${recipe._id}`)}>View</button>
                         </div>
                     </div>
                 ))
@@ -42,7 +41,7 @@ const ViewRecipes = ({search,setSearch,allRecipes,setAllRecipes}) => {
                 <p>No recipes found</p>
             );
   return (
-<div className='my-boundary border border-primary rounded-3'>
+<div className='my-boundary my-border'>
             <div className='recipe-gallery recipe-view overflow-hidden'>
           {display}
             </div>

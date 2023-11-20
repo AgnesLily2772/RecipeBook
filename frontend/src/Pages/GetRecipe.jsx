@@ -5,6 +5,8 @@ import { FaClipboardList } from "react-icons/fa";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { SERVER_URL } from '../Utils/globals';
+import { IoIosTime } from "react-icons/io";
+import { MdNumbers } from "react-icons/md";
 const GetRecipe = () => {
         const [recipe,setRecipe] = useState({})
         const params = useParams()
@@ -26,23 +28,24 @@ const GetRecipe = () => {
               }, [callRecipes]);
   return (
     <>
-    <div className='my-container' style={{border:"2px solid red"}}>
-        <div className='shadow'  style={{border:"2px solid blue"}}>
-        <h1 className='text-center'>{recipe.title}</h1>
-        <div className='d-flex flex-row flex-sm-col gap-3'>
-        <img className='w-50' src={recipe.imageUrl} alt={`${recipe.title} Img`}/>
-      <div className='w-50'>
-                <FaClipboardList size={30}/> Ingredients
+    <div className='my-container'>
+    <div className='view-recipe '>
+        <h1 className='text-center recipe-title'>{recipe.title}</h1>
+        <div className='view-recipe-box gap-3'>
+        <img className='view-recipe-img' src={recipe.imageUrl} alt={`${recipe.title} Img`}/>
+      <div className='view-recipe-content'>
+                <FaClipboardList size={30} color='red'/>    Ingredients
                 {recipe.ingredients && recipe.ingredients.map((instruction,idx) => (
                         <li key={idx}>{instruction}</li>
                 ))}                                        
-                <FaClipboardList size={30}/> Instructions
+                <hr/>
+                <MdNumbers size={30} color='green'/>    Instructions
                 {recipe.instructions && recipe.instructions.split(",").map((instruction,idx) => (
                         <li key={idx}>{instruction}</li>
                 ))}
-                <FaClipboardList size={30}/> Preparation time
+                <hr/>
+                <IoIosTime size={30} color='blue'/>    Preparation time
                 <li>Approximately {recipe.preparationTime}mins</li>
-                <FaClipboardList size={30}/> Cuisine & Category
                 <li>{recipe.cuisine} & {recipe.category}</li>
         </div>
         </div>

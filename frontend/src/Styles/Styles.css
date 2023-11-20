@@ -132,6 +132,10 @@
         display: grid;
         grid-template-columns: auto auto;
 }
+.error-img{
+        border-radius: 20px;
+        height: 300px;
+}
 @media (max-width: 576px) {
         #submenu1,
         #submenu2,
@@ -206,4 +210,5 @@
         .credential{
                 font-size: 15px;
         }
+
 }

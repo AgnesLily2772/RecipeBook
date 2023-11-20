@@ -5,10 +5,11 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from "axios"
 import FileBase from 'react-file-base64';
+import { SERVER_URL } from '../Utils/globals';
 
 const CreateRecipe = () => {
         const navigate = useNavigate();
-        const [recipe, setRecipe] = useState({title:"",ingredients:[],instructions:"",imageUrl:"",cuisine:"",category:"",preparationTime:"",createdBy:"6557aa228bffcc2f832988c0"})
+        const [recipe, setRecipe] = useState({title:"",ingredients:[],instructions:"",imageUrl:"",cuisine:"",category:"",preparationTime:""})
         const handleInputs = (e) =>{
                 if (e.target.name === 'ingredients') {
                         const ingredientsArray = e.target.value.split(',')
@@ -17,28 +18,38 @@ const CreateRecipe = () => {
                         setRecipe({ ...recipe, [e.target.name]: e.target.value });
                       }
       }
+      const dataValidation = () => {
+        for (let property in recipe) {
+          const value = recipe[property];
       
+          if (Array.isArray(value)) {
+            if (value.length === 0) {
+              toast.error(`${property} must have at least one item`, { position: toast.POSITION.BOTTOM_RIGHT, autoClose: 1000 });
+              return false;
+            }
+          } else if (typeof value === 'string') {
+            if (value.trim() === "") {
+              toast.error(`${property} is required`, { position: toast.POSITION.BOTTOM_RIGHT, autoClose: 1000 });
+              return false;
+            }
+          }
+        }
+      
+        return true;
+      };
       const PostData = async (e) =>{
         e.preventDefault();
-        console.log(recipe)
+        if(!dataValidation())return
         try {
-              const response = await axios.post("http://localhost:5000/api/createRecipe", recipe)
-              const data = response.data;
-              if(response.status=== 422  || !data){
-                      toast.error(data.error,{
-                              position: toast.POSITION.BOTTOM_RIGHT,
-                              autoClose: 1000,
-                    })
-                  }else{
-                      toast.success("Recipe Posted",{
-                              position: toast.POSITION.BOTTOM_RIGHT,
-                              autoClose: 1000,
-                      })
-                      setTimeout(()=>navigate("/myRecipes"),2000)
-                  }
-            } catch (error) {
-              console.log(error)
-            }
+                const response = await axios.post(`${SERVER_URL}/createRecipe`, recipe,{withCredentials:true})
+                if(response.status === 200 ){
+                        toast.success("Recipe Posted",{ position: toast.POSITION.BOTTOM_RIGHT, autoClose: 1000})
+                        setTimeout(()=>navigate("/myRecipes"),2000)
+                }
+        } catch (error) {
+                const errorMessage = error.response ? error.response.data.message : "An error occurred";
+                toast.error(errorMessage, { position: toast.POSITION.BOTTOM_RIGHT, autoClose: 1000 })
+        }
       }
   return (
     <>
@@ -60,16 +71,15 @@ const CreateRecipe = () => {
           </select> 
             <select className='col ms-3 me-2 registerdropdown' name='cuisine' onChange={handleInputs} value={recipe.cuisine || ""}>
             <option value="none"  hidden>Select Cuisine</option>
-            <option value="TamilNadu">TamilNadu Cuisine</option>
-            <option value="Non Kerala">Kerala Cuisine</option>
-            <option value="Andhra">Andhra Cusine</option>
+            <option value="SouthIndian">SouthIndian Cuisine</option>
+            <option value="NorthIndian">NorthIndian Cuisine</option>
+            <option value="International">International Cusine</option>
           </select> 
           <select className='col ms-3 me-3 registerdropdown' name='category' onChange={handleInputs} value={recipe.category || ""}>
             <option value="none"  hidden>Select Category</option>
             <option value="Breakfast">Breakfast</option>
             <option value="Lunch">Lunch</option>
             <option value="Dinner">Dinner</option>
-            <option value="Desserts">Desserts</option>
           </select> 
             </div>
             <FileBase  className="file-upload" name="imageUrl" type="file" multiple={false} onDone={({ base64 }) => setRecipe({ ...recipe, imageUrl: base64 })} />

@@ -1,24 +1,25 @@
-import React,{useEffect,useState} from 'react'
+import React,{useCallback, useEffect,useState} from 'react'
 import axios from "axios"
-import pastaImg from "../Imgs/pasta.jpg"
 import { FaClipboardList } from "react-icons/fa";
 import {useParams} from "react-router-dom"
+import { SERVER_URL } from '../Utils/globals';
+
 const ViewRecipe = () => {
         const [recipe,setRecipe] = useState({})
         const [comments,setComments] = useState([])
         const [newComment,setNewComment] = useState({text:""})
         const params = useParams()
-        const callRecipes = async() => {
-                const recipeResponse =await axios.get(`http://localhost:5000/api/getRecipe/${params.id}`,{withCredentials:true})
+        const callRecipes = useCallback(async() => {
+                const recipeResponse =await axios.get(`${SERVER_URL}/getRecipe/${params.id}`,{withCredentials:true})
                 setRecipe(recipeResponse.data)
-                const commentResponse =await axios.get(`http://localhost:5000/api/getComment/${params.id}`,{withCredentials:true})
+                const commentResponse =await axios.get(`${SERVER_URL}/getComment/${params.id}`,{withCredentials:true})
                 setComments(commentResponse.data)
-        }
+        },[params.id])
         useEffect(()=>{
                 callRecipes()
-            },[])
+            },[callRecipes])
             const handleComment = async() => {
-                const response = await axios.post(`http://localhost:5000/api/postComment/${params.id}`,newComment,{withCredentials:true})
+                 await axios.post(`${SERVER_URL}/postComment/${params.id}`,newComment,{withCredentials:true})
                 setComments((prevComments )=>[...prevComments,newComment])
                 setNewComment("")
             }
@@ -28,7 +29,7 @@ const ViewRecipe = () => {
         <div className='shadow'  style={{border:"2px solid blue"}}>
         <h1 className='text-center'>{recipe.title}</h1>
         <div className='d-flex flex-row flex-sm-col gap-3'>
-        <img className='w-50' src={pastaImg.toString()} alt={`${recipe.title} Img`}/>
+        <img className='w-50' src={recipe.imageUrl} alt={`${recipe.title} Img`}/>
       <div className='w-50'>
                 <FaClipboardList size={30}/> Ingredients
                 {recipe.ingredients && recipe.ingredients.map((instruction,idx) => (

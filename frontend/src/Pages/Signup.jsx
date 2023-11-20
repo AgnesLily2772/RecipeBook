@@ -4,38 +4,39 @@ import { useNavigate} from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from "axios"
+import { SERVER_URL } from '../Utils/globals';
 
 const Signup = () => {
 
   const navigate = useNavigate();
 
-  const [user, setUser] = useState({fullName:"",email:"",password:"",dietPreference:"",location:""})
+  const [user, setUser] = useState({fullName:"",email:"",password:"",dietPreference:"",location:"",agreedToTerms:true})
   const handleInputs = (e) =>{
       setUser({...user,[e.target.name]:e.target.value});
 }
-
-const PostData = async (e) =>{
-  e.preventDefault();
-  try {
-        const response = await axios.post("http://localhost:5000/api/signup", user)
-    
-        const data = response.data;
-        if(response.status=== 422  || !data){
-                toast.error(data.error,{
-                        position: toast.POSITION.BOTTOM_RIGHT,
-                        autoClose: 1000,
-              })
-            }else{
-                toast.success("Signup Successful",{
-                        position: toast.POSITION.BOTTOM_RIGHT,
-                        autoClose: 1000,
-                })
-                setTimeout(()=>navigate("/signin"),2000)
-            }
-      } catch (error) {
-        console.log(error)
-      }
-}
+const dataValidation = () => {
+        for (let data in user) {
+                if ( (data !== "agreedToTerms" && user[data].trim() === "") || (data === "agreedToTerms" && user[data] === false)) {
+                  toast.error(`${data} is required`, { position: toast.POSITION.BOTTOM_RIGHT, autoClose: 1000 });
+                  return false;
+                }
+              }
+              return true;
+      };
+const PostData = async (e) => {
+        e.preventDefault();
+        if (!dataValidation()) return
+        try {
+          const response = await axios.post(`${SERVER_URL}/signup`, user);
+          if (response.status === 200) {
+                toast.success("Signup Successful", { position: toast.POSITION.BOTTOM_RIGHT, autoClose: 1000 });
+                setTimeout(() => navigate("/signin"), 2000);
+          } 
+        } catch (error) {
+                const errorMessage = error.response ? error.response.data.message : "An error occurred";
+                toast.error(errorMessage, { position: toast.POSITION.BOTTOM_RIGHT, autoClose: 1000 })
+        }
+      };
       
   return (
     <>
@@ -54,11 +55,11 @@ const PostData = async (e) =>{
             <option value="Non Vegetarian">Non Vegetarian</option>
             <option value="Eggetarian">Eggetarian</option>
           </select>
-          <button className='my-button ' value="register" onClick={PostData}>SignUp</button>
+          <div className='d-flex flex-row gap-3'><input type='checkbox' className='form-check-input' defaultChecked={user.agreedToTerms} name='agreedToTerms'onChange={(e) =>setUser({...user,agreedToTerms: e.target.checked})}/><label>I accept the terms and conditions</label></div>
+          <button className='my-button ' onClick={PostData}>SignUp</button>
         </form>
     </div>
 <ToastContainer/>
-    
     </>
   )
 }

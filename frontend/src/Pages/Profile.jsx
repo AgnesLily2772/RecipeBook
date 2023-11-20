@@ -1,21 +1,23 @@
 import {React,useState,useEffect} from 'react'
 import '../Styles/Styles.css'
 import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { SERVER_URL } from '../Utils/globals';
 
 const Profile = () => {
   const [userData,setUserData] = useState({});
   const callProfilePage = async () =>{
     try{
-      const response =await axios.get('http://localhost:5000/api/getUserData',{withCredentials:true});
-      const data =  response.data;
+      const response =await axios.get(`${SERVER_URL}/getUserData`,{withCredentials:true});
+      if(response.status === 200 ){
+        const data =  response.data;
       setUserData(data);
-      if(!response.status===200){
-        const error = new Error (response.error);
-        throw error;
-      }
-    }catch(err){
-      console.log(err);
-    }
+        }
+        } catch (error) {
+        const errorMessage = error.response ? error.response.data.message : "An error occurred";
+        toast.error(errorMessage, { position: toast.POSITION.BOTTOM_RIGHT, autoClose: 1000 })
+        }
   }
 useEffect(() => {
   callProfilePage();
@@ -31,6 +33,7 @@ useEffect(() => {
             <p className='profile-item'>Location : {userData.location}</p>
         </div>
    </div>
+   <ToastContainer/>
    </>
   )
 }

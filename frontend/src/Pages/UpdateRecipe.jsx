@@ -3,13 +3,13 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom'; 
 import FileBase from 'react-file-base64';
-
+import { SERVER_URL } from '../Utils/globals';
 const UpdateRecipe = () => {
         const navigate = useNavigate()
         const params = useParams();
         const [recipe,setRecipe] = useState({})
         useEffect(()=>{
-                axios.get(`http://localhost:5000/api/getRecipe/${params.id}`,{withCredentials:true})
+                axios.get(`${SERVER_URL}/getRecipe/${params.id}`,{withCredentials:true})
                 .then((data) => setRecipe(data.data))
             },[params.id])
             const handleInputs=(e)=>{
@@ -17,7 +17,7 @@ const UpdateRecipe = () => {
             }
             const handleUpdate = (e)=>{
                 e.preventDefault();
-                axios.put(`http://localhost:5000/api/updateRecipe/${params.id}`,recipe,{withCredentials:true})
+                axios.put(`${SERVER_URL}/updateRecipe/${params.id}`,recipe,{withCredentials:true})
                 .then((res) => setRecipe({title:""}))
                 navigate('/myRecipes')
             }
@@ -40,9 +40,9 @@ const UpdateRecipe = () => {
           </select> 
             <select className='col ms-3 me-2 registerdropdown' name='cuisine' onChange={handleInputs} value={recipe.cuisine || ""}>
             <option value="none"  hidden>Select Cuisine</option>
-            <option value="TamilNadu">TamilNadu Cuisine</option>
-            <option value="Non Kerala">Kerala Cuisine</option>
-            <option value="Andhra">Andhra Cusine</option>
+            <option value="SouthIndian">SouthIndian Cuisine</option>
+            <option value="NorthIndian">NorthIndian Cuisine</option>
+            <option value="International">International Cusine</option>
           </select> 
           <select className='col ms-3 me-3 registerdropdown' name='category' onChange={handleInputs} value={recipe.category || ""}>
             <option value="none"  hidden>Select Category</option>

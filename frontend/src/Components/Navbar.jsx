@@ -3,8 +3,7 @@ import { Link } from 'react-router-dom';
 import { AuthContext } from '../Context/AuthContext.js';
 
 const Navbar = () => {
-        const {authState} = useContext(AuthContext)
-
+        const {userState} = useContext(AuthContext)
     return (
         <>
                 <nav className="navbar navbar-expand-lg py-3 my-navbar fixed-top">
@@ -13,15 +12,16 @@ const Navbar = () => {
                                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation"> <span className="navbar-toggler-icon" style={{color:"white"}}>↓↓↓</span> </button>
                                 <div className="collapse navbar-collapse" id="navbarScroll">
                                 <ul className="navbar-nav ms-auto">
-                                {authState.isAuthenticated ? 
+                                {userState ? 
                                         <>
+                                        <li className="nav-item"><Link className="nav-link my-navbar-item" to="/" >Home</Link></li>
                                         <li className="nav-item"><Link className="nav-link my-navbar-item" to="/myRecipes" >MyRecipes</Link></li>
                                         <li className="nav-item"><Link className="nav-link my-navbar-item" to="/profile" >Profile</Link></li>
                                         <li className="nav-item"><Link className="nav-link my-navbar-item" to="/signout" >SignOut</Link></li>
                                         </>:
                                         <>
-                                         <li className="nav-item"><Link className="nav-link my-navbar-item" to="/signin" >SignIn</Link></li>
                                         <li className="nav-item"><Link className="nav-link my-navbar-item" to="/signup" >SignUp</Link></li>
+                                         <li className="nav-item"><Link className="nav-link my-navbar-item" to="/signin" >SignIn</Link></li>
                                         </>
                                 }
                                 </ul>

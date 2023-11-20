@@ -1,4 +1,8 @@
 import React from 'react'
+import { IoIosTime } from "react-icons/io";
+import { FaClipboardList, } from "react-icons/fa";
+import { FaBowlFood } from "react-icons/fa6";
+import { FaPlateWheat } from "react-icons/fa6";
 
 const Sidebar = ({filterCuisine,filterCategory,filterNoIngredients,filterPrepTime}) => {
         const PrepTimeFilterOptions = [[0,20], [20,40],[40,60]]
@@ -8,9 +12,9 @@ const Sidebar = ({filterCuisine,filterCategory,filterNoIngredients,filterPrepTim
 
   return (
         <div className="col-sm-2 flex-grow-sm-1 flex-shrink-1 flex-grow-0 sticky-top pb-sm-0  mt-5 ">
-        <div className="border border-primary rounded-3 nav nav-pills flex-sm-column flex-row p-2">
+        <div className="my-border nav nav-pills flex-sm-column flex-row p-2 h-100">
                         <a href="#submenu1"  data-bs-toggle="collapse" className="nav-link px-0 align-middle">
-                            <i className="fs-4 bi-speedometer2"></i> <span className="ms-1 d-none d-sm-inline">Preparation Time</span> </a>
+                        <IoIosTime size={30} className="fs-4"/><span className="ms-1 d-none d-sm-inline">Preparation Time </span></a>
                         <ul className="collapse show nav flex-column ms-1" id="submenu1" data-bs-parent="#menu">
                                  {PrepTimeFilterOptions.map((filter,idx) =>(
                                         <div className="form-check w-100" key={idx}>
@@ -20,7 +24,7 @@ const Sidebar = ({filterCuisine,filterCategory,filterNoIngredients,filterPrepTim
                                 ) )}
                         </ul>
                         <a href="#submenu1"  data-bs-toggle="collapse" className="nav-link px-0 align-middle">
-                            <i className="fs-4 bi-speedometer2"></i> <span className="ms-1 d-none d-sm-inline">No.of Ingrediets</span> </a>
+                        <FaClipboardList size={30} className="fs-4"/><span className="ms-1 d-none d-sm-inline">No. of ingredients</span></a>
                         <ul className="collapse show nav flex-column ms-1" id="submenu1" data-bs-parent="#menu">
                                  {NoIngredientsFilterOptions.map((filter,idx) =>(
                                         <div className="form-check w-100" key={idx}>
@@ -30,7 +34,7 @@ const Sidebar = ({filterCuisine,filterCategory,filterNoIngredients,filterPrepTim
                                 ) )}
                         </ul>
                         <a href="#submenu1"  data-bs-toggle="collapse" className="nav-link px-0 align-middle">
-                            <i className="fs-4 bi-speedometer2"></i> <span className="ms-1 d-none d-sm-inline">Cuisine</span> </a>
+                            <FaBowlFood size={30} className="fs-4"/> <span className="ms-1 d-none d-sm-inline">Cuisine</span> </a>
                         <ul className="collapse show nav flex-column ms-1" id="submenu1" data-bs-parent="#menu">
                                  {cuisineOptions.map((item,idx) =>(
                                         <div className="form-check w-100" key={idx}>
@@ -40,7 +44,7 @@ const Sidebar = ({filterCuisine,filterCategory,filterNoIngredients,filterPrepTim
                                 ) )}
                         </ul>
                         <a href="#submenu1"  data-bs-toggle="collapse" className="nav-link px-0 align-middle">
-                            <i className="fs-4 bi-speedometer2"></i> <span className="ms-1 d-none d-sm-inline">Category</span> </a>
+                            <FaPlateWheat size={30}/><span className="ms-1 d-none d-sm-inline">Category</span></a>
                         <ul className="collapse show nav flex-column ms-1" id="submenu1" data-bs-parent="#menu">
                                  {categoryOptions.map((item,idx) =>(
                                         <div className="form-check w-100" key={idx}>

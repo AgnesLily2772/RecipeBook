@@ -13,6 +13,8 @@ import UpdateRecipe from './Pages/UpdateRecipe.jsx';
 import ViewRecipe from './Pages/ViewRecipe.jsx';
 import GetRecipe from './Pages/GetRecipe.jsx';
 import Activation from './Pages/Activation.jsx';
+import ErrorPage from './Pages/ErrorPage.jsx';
+
 export default function App() {
   return (
     <div className="App">
@@ -31,6 +33,8 @@ export default function App() {
                                 <Route exact path="/viewRecipe/:id" element={<GetRecipe />} />
                                 <Route exact path="/activate" element={<Activation />} />                                
                                 <Route exact path="/updateRecipe/:id" element={<UpdateRecipe />} />
+                                <Route path="*" element={<ErrorPage />} />
+
                         </Routes>
                 </BrowserRouter>
         </AuthDataContext>
